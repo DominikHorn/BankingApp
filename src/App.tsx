@@ -1,11 +1,8 @@
 import * as React from 'react';
 import './App.css';
-
-import {Col, Row, Table} from 'antd';
-import {ChangeEvent} from "react";
-import {FileInput} from "./components/FileInput";
+import {AccountBalancePlot, IAccountPlotDataPoint} from "./components/AccountBalancePlot";
+import {BankStatementTable} from "./components/BankStatementTable";
 import {ICsvEntity} from "./types/ICsvEntity";
-import {csvColumns, parseN26Csv} from "./util/CsvUtil";
 
 export interface IAppProps {
     appname: string;
@@ -13,6 +10,7 @@ export interface IAppProps {
 
 interface IAppState {
     data: ICsvEntity[];
+    accountPlotData: IAccountPlotDataPoint[];
 }
 
 class App extends React.Component<IAppProps, IAppState> {
@@ -20,63 +18,41 @@ class App extends React.Component<IAppProps, IAppState> {
         super(props);
 
         this.state = {
+            accountPlotData: [],
             data: [],
         };
 
-        this.onInputChange = this.onInputChange.bind(this);
+        // Make this keyword refer to app instance in handler code
+        this.handleBankStatementTableChange = this.handleBankStatementTableChange.bind(this);
     }
 
+    /** Rendering code */
     public render() {
         return (
-            <div className="tableWrapper">
-                <Row gutter={16}
-                     justify="center"
-                     style={{
-                         marginBottom: '5px',
-                         marginLeft: '1px',
-                         marginTop: '5px',
-                     }}>
-                    <Col span={4}>
-                        <FileInput onChange={this.onInputChange}/>
-                    </Col>
-                </Row>
-                <Row gutter={16} justify="center">
-                    <Col span={24}>
-                        <Table
-                            columns={csvColumns}
-                            dataSource={this.state.data}
-                            pagination={false}
-                            scroll={{ y: 600 }}
-                            size="middle"
-                        />
-                    </Col>
-                </Row>
-            </div>
-        );
+            <div>
+                <AccountBalancePlot
+                    data={this.state.accountPlotData}/>
+                <BankStatementTable
+                    data={this.state.data}
+                    onChange={this.handleBankStatementTableChange}/>
+            </div>);
     }
 
-    private onInputChange(event: ChangeEvent) {
-        if (event.target == null) {
-            // Bail out on null
-            return;
-        }
+    /** Event handeling */
+    private handleBankStatementTableChange(newData: ICsvEntity[]) {
+        let balance = 0;
+        const accountPlotData: IAccountPlotDataPoint[] = newData.map(dp => {
+            balance = balance + (dp.amount ? dp.amount : 0);
+            return {
+                label: dp.date.toLocaleString(),
+                value: balance,
+            };
+        });
 
-        // @ts-ignore
-        const file = event.target.files[0];
-        if (!file) {
-            // No file selected
-            return;
-        }
-
-        const reader = new FileReader();
-        reader.onload = _ => {
-            if (reader.result && typeof reader.result === 'string') {
-                this.setState({
-                    data: parseN26Csv(reader.result),
-                });
-            }
-        };
-        reader.readAsText(file);
+        this.setState({
+            accountPlotData,
+            data: newData,
+        });
     }
 }
 

@@ -94,7 +94,7 @@ function parseN26CsvLine(columnTitles: string[], line: string): ICsvEntity {
         amount: amount && amount !== "" ? parseFloat(amount) : undefined,
         amountForeign: amountForeign && amountForeign !== "" ? parseFloat(amountForeign) : undefined,
         category,
-        date: date && date !== "" ? new Date(date) : undefined,
+        date: date ? new Date(date) : new Date(), // TODO: rework this line
         exchangeRate: exchangeRate && exchangeRate !== "" ? parseFloat(exchangeRate) : undefined,
         payee,
         paymentReference,
