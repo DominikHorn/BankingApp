@@ -1,5 +1,6 @@
 import * as React from 'react';
 import './App.css';
+import {AccountBalancePlot} from "./components/AccountBalancePlot";
 import {BankStatementTable} from "./components/BankStatementTable";
 import {ICsvEntity} from "./types/ICsvEntity";
 
@@ -26,9 +27,12 @@ class App extends React.Component<IAppProps, IAppState> {
     /** Rendering code */
     public render() {
         return (
-            <BankStatementTable
-                data={this.state.data}
-                onChange={this.handleBankStatementTableChange}/>);
+            <div>
+                <AccountBalancePlot/>
+                <BankStatementTable
+                    data={this.state.data}
+                    onChange={this.handleBankStatementTableChange}/>
+            </div>);
     }
 
     /** Event handeling */
