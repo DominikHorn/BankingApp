@@ -33,7 +33,7 @@ class App extends React.Component<IAppProps, IAppState> {
                      justify="center"
                      style={{
                          marginBottom: '5px',
-                         marginLeft: '3px',
+                         marginLeft: '1px',
                          marginTop: '5px',
                      }}>
                     <Col span={4}>
