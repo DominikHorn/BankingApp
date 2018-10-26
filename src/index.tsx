@@ -5,7 +5,7 @@ import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 
 ReactDOM.render(
-  <App />,
+  <App appname={'BankingApp'}/>,
   document.getElementById('root') as HTMLElement
 );
 registerServiceWorker();

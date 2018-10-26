@@ -1,0 +1,35 @@
+.inputfile {
+    display: none;
+}
+
+.inputfile + label {
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+    overflow: hidden;
+    padding: 0.5rem 1rem;
+
+    /* color schema */
+    color: white;
+    background-color: #187b9a;
+
+    /* Change cursor display on hover */
+    cursor: pointer;
+    
+    /* Rounded corners */
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.inputfile:focus + label {
+    outline: 1px dotted #000;
+    outline: -webkit-focus-ring-color auto 5px;
+}
+
+
+.inputfile:focus + label,
+.inputfile + label:hover {
+    background-color: #173372;
+}
