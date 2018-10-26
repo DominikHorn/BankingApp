@@ -1,11 +1,7 @@
 import * as React from 'react';
 import './App.css';
-
-import {Col, Row, Table} from 'antd';
-import {ChangeEvent} from "react";
-import {FileInput} from "./components/FileInput";
+import {BankStatementTable} from "./components/BankStatementTable";
 import {ICsvEntity} from "./types/ICsvEntity";
-import {csvColumns, parseN26Csv} from "./util/CsvUtil";
 
 export interface IAppProps {
     appname: string;
@@ -23,60 +19,23 @@ class App extends React.Component<IAppProps, IAppState> {
             data: [],
         };
 
-        this.onInputChange = this.onInputChange.bind(this);
+        // Make this keyword refer to app instance in handler code
+        this.handleBankStatementTableChange = this.handleBankStatementTableChange.bind(this);
     }
 
+    /** Rendering code */
     public render() {
         return (
-            <div className="tableWrapper">
-                <Row gutter={16}
-                     justify="center"
-                     style={{
-                         marginBottom: '5px',
-                         marginLeft: '1px',
-                         marginTop: '5px',
-                     }}>
-                    <Col span={4}>
-                        <FileInput onChange={this.onInputChange}/>
-                    </Col>
-                </Row>
-                <Row gutter={16} justify="center">
-                    <Col span={24}>
-                        <Table
-                            columns={csvColumns}
-                            dataSource={this.state.data}
-                            pagination={false}
-                            scroll={{ y: 600 }}
-                            size="middle"
-                        />
-                    </Col>
-                </Row>
-            </div>
-        );
+            <BankStatementTable
+                data={this.state.data}
+                onChange={this.handleBankStatementTableChange}/>);
     }
 
-    private onInputChange(event: ChangeEvent) {
-        if (event.target == null) {
-            // Bail out on null
-            return;
-        }
-
-        // @ts-ignore
-        const file = event.target.files[0];
-        if (!file) {
-            // No file selected
-            return;
-        }
-
-        const reader = new FileReader();
-        reader.onload = _ => {
-            if (reader.result && typeof reader.result === 'string') {
-                this.setState({
-                    data: parseN26Csv(reader.result),
-                });
-            }
-        };
-        reader.readAsText(file);
+    /** Event handeling */
+    private handleBankStatementTableChange(newData: ICsvEntity[]) {
+        this.setState({
+            data: newData,
+        });
     }
 }
 
