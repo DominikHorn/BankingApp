@@ -4,7 +4,7 @@ export interface ICsvEntity {
     amount?: number,
     amountForeign?: number,
     category?: string,
-    date?: Date,
+    date: Date,
     exchangeRate?: number,
     payee?: string,
     paymentReference?: string,

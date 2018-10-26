@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './App.css';
-import {AccountBalancePlot} from "./components/AccountBalancePlot";
+import {AccountBalancePlot, IAccountPlotDataPoint} from "./components/AccountBalancePlot";
 import {BankStatementTable} from "./components/BankStatementTable";
 import {ICsvEntity} from "./types/ICsvEntity";
 
@@ -10,6 +10,7 @@ export interface IAppProps {
 
 interface IAppState {
     data: ICsvEntity[];
+    accountPlotData: IAccountPlotDataPoint[];
 }
 
 class App extends React.Component<IAppProps, IAppState> {
@@ -17,6 +18,7 @@ class App extends React.Component<IAppProps, IAppState> {
         super(props);
 
         this.state = {
+            accountPlotData: [],
             data: [],
         };
 
@@ -28,7 +30,8 @@ class App extends React.Component<IAppProps, IAppState> {
     public render() {
         return (
             <div>
-                <AccountBalancePlot/>
+                <AccountBalancePlot
+                    data={this.state.accountPlotData}/>
                 <BankStatementTable
                     data={this.state.data}
                     onChange={this.handleBankStatementTableChange}/>
@@ -37,7 +40,17 @@ class App extends React.Component<IAppProps, IAppState> {
 
     /** Event handeling */
     private handleBankStatementTableChange(newData: ICsvEntity[]) {
+        let balance = 0;
+        const accountPlotData: IAccountPlotDataPoint[] = newData.map(dp => {
+            balance = balance + (dp.amount ? dp.amount : 0);
+            return {
+                label: dp.date.toLocaleString(),
+                value: balance,
+            };
+        });
+
         this.setState({
+            accountPlotData,
             data: newData,
         });
     }
