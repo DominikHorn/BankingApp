@@ -2,6 +2,7 @@
 
 .tableWrapper {
     margin: 1em;
-
-    /*border: 1px solid gray;*/
+    margin-top: 1em;
+    border: 1px solid #bdbdbd;
+    box-shadow: 2px 2px;
 }

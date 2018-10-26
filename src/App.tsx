@@ -29,7 +29,13 @@ class App extends React.Component<IAppProps, IAppState> {
     public render() {
         return (
             <div className="tableWrapper">
-                <Row gutter={16} justify="center" style={{marginBottom: '5px'}}>
+                <Row gutter={16}
+                     justify="center"
+                     style={{
+                         marginBottom: '5px',
+                         marginLeft: '3px',
+                         marginTop: '5px',
+                     }}>
                     <Col span={4}>
                         <FileInput onChange={this.onInputChange}/>
                     </Col>
@@ -39,6 +45,8 @@ class App extends React.Component<IAppProps, IAppState> {
                         <Table
                             columns={csvColumns}
                             dataSource={this.state.data}
+                            pagination={false}
+                            scroll={{ y: 600 }}
                             size="middle"
                         />
                     </Col>
