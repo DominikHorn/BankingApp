@@ -41,7 +41,7 @@ export class BankStatementTable extends React.Component<IBankStatementProps, any
                         columns={csvColumns}
                         dataSource={this.props.data}
                         pagination={false}
-                        scroll={{y: 500}}
+                        scroll={{y: 400}}
                         size="middle"
                     />
                 </Col>

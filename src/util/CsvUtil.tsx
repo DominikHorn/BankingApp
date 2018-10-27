@@ -11,14 +11,17 @@ export const csvColumns = [{
     dataIndex: 'payee',
     key: 'payee',
     title: 'Payee',
+    width: 150,
 }, {
     dataIndex: 'accountNumber',
     key: 'accountNumber',
     title: 'Account Number',
+    width: 250,
 }, {
     dataIndex: 'transactionType',
     key: 'transactionType',
     title: 'Transaction Type',
+    width: 200,
 }, {
     dataIndex: 'paymentReference',
     key: 'paymentReference',
@@ -28,22 +31,27 @@ export const csvColumns = [{
     dataIndex: 'category',
     key: 'category',
     title: 'Category',
+    width: 150,
 }, {
     dataIndex: 'amount',
     key: 'amount',
     title: 'Amount',
+    width: 80,
 }, {
     dataIndex: 'amountForeign',
     key: 'amountForeign',
     title: 'Amount Foreign',
+    width: 120,
 }, {
     dataIndex: 'typeForeign',
     key: 'typeForeign',
     title: 'Type Foreign',
+    width: 100,
 }, {
     dataIndex: 'exchangeRate',
     key: 'exchangeRate',
     title: 'Exchange Rate',
+    width: 120,
 }];
 
 export function parseN26Csv(fileContents: string): ICsvEntity[] {
