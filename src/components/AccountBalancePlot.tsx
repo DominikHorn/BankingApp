@@ -1,6 +1,6 @@
-import memoize from "memoize-one";
+import {Alert, Card} from "antd";
 import * as React from 'react';
-import {Line} from "react-chartjs-2";
+import {CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis} from 'recharts';
 import './AccountBalancePlot.css';
 
 export interface IAccountBalancePlotProps {
@@ -8,51 +8,31 @@ export interface IAccountBalancePlotProps {
 }
 
 export interface IAccountPlotDataPoint {
-    label: string;
-    value: string;
+    balance: string;
+    date: string;
 }
 
 export class AccountBalancePlot extends React.Component<IAccountBalancePlotProps, any> {
-    /** Memoized linechart data. This prevents unnecessary recalcs */
-    private lineChartData = memoize(
-        (dat: IAccountPlotDataPoint[]) => ({
-            datasets: [
-                {
-                    backgroundColor: 'rgba(75,192,192,0.4)',
-                    borderCapStyle: 'butt',
-                    borderColor: 'rgba(75,192,192,1)',
-                    borderDash: [],
-                    borderDashOffset: 0.0,
-                    borderJoinStyle: 'miter',
-                    data: dat.map(d => d.value),
-                    fill: false,
-                    label: 'Account Balance',
-                    lineTension: 0.1,
-                    pointBackgroundColor: '#fff',
-                    pointBorderColor: 'rgba(75,192,192,1)',
-                    pointBorderWidth: 1,
-                    pointHitRadius: 10,
-                    pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-                    pointHoverBorderColor: 'rgba(220,220,220,1)',
-                    pointHoverBorderWidth: 2,
-                    pointHoverRadius: 5,
-                    pointRadius: 1,
-                }
-            ],
-            labels: dat.map(d => d.label)
-        }));
-
     public render() {
-        const lineChartData = this.lineChartData(this.props.data);
-
-        // TODO: correct this!!!
-        // @ts-ignore type definitions are wrong
-        return <Line data={lineChartData}
-                     className="linePlot"
-                     height={100}
-            // options={{
-            //     maintainAspectRatio: false,
-            // }}
-        />;
+        // TODO: vary plot height based on devices
+        // TODO: use unified measures for margin (1em instead of '20' f.e.)
+        return this.props.data.length > 0 ? (
+            <ResponsiveContainer
+                width={"100%"}
+                height={400}
+            >
+                <LineChart data={this.props.data} margin={{top: 20, right: 50, bottom: 40}}>
+                    <Line type="monotone" dataKey="balance" stroke="#8884d8"/>
+                    <CartesianGrid stroke="#ccc" strokeDasharray="5 5"/>
+                    <XAxis dataKey="date" tick={{angle: 45, textAnchor: "start"}}/>
+                    <YAxis/>
+                    <Tooltip/>
+                </LineChart>
+            </ResponsiveContainer>
+        ) : (
+            <Card className="InfoCard">
+                <Alert message="Keine plotbaren Daten" type="warning"/>
+            </Card>
+        );
     }
 }

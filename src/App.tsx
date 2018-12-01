@@ -45,9 +45,13 @@ class App extends React.Component<IAppProps, IAppState> {
         const accountPlotData: IAccountPlotDataPoint[] = newData.map(dp => {
             // Update previous balance for next iteration
             previousBalance = Money.add(previousBalance, dp.amount);
+
+            const dd = dp.date.getDate();
+            const mm = dp.date.getMonth() + 1;
+            const yyyy = dp.date.getFullYear();
             return {
-                label: dp.date.toLocaleString(),
-                value: previousBalance.valueString(),
+                balance: previousBalance.valueString(),
+                date: `${dd < 10 ? `0${dd}` : dd}.${mm < 10 ? `0${mm}` : mm}.${yyyy}`,
             };
         });
 
