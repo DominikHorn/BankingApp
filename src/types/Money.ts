@@ -35,8 +35,12 @@ export class Money {
         this.amount = amount;
     }
 
-    public toString(): string {
+    public valueString(): string {
         const amountStr = this.amount.toString();
         return `${amountStr.substr(0, amountStr.length - 2)}.${amountStr.substr(amountStr.length - 2, 2)}`;
+    }
+
+    public toString(): string {
+        return `${this.valueString()}€`;
     }
 }

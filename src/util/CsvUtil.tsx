@@ -36,23 +36,24 @@ export const csvColumns = [{
 }, {
     dataIndex: 'amount',
     key: 'amount',
+    render: (mon: Money) => mon.toString(),
     title: 'Amount',
     width: 80,
-}, {
-    dataIndex: 'amountForeign',
-    key: 'amountForeign',
-    title: 'Amount Foreign',
-    width: 120,
-}, {
-    dataIndex: 'typeForeign',
-    key: 'typeForeign',
-    title: 'Type Foreign',
-    width: 100,
-}, {
-    dataIndex: 'exchangeRate',
-    key: 'exchangeRate',
-    title: 'Exchange Rate',
-    width: 120,
+// }, {
+//     dataIndex: 'amountForeign',
+//     key: 'amountForeign',
+//     title: 'Amount Foreign',
+//     width: 120,
+// }, {
+//     dataIndex: 'typeForeign',
+//     key: 'typeForeign',
+//     title: 'Type Foreign',
+//     width: 100,
+// }, {
+//     dataIndex: 'exchangeRate',
+//     key: 'exchangeRate',
+//     title: 'Exchange Rate',
+//     width: 120,
 }];
 
 export function parseN26Csv(fileContents: string): ICsvEntity[] {

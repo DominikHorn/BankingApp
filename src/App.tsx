@@ -47,7 +47,7 @@ class App extends React.Component<IAppProps, IAppState> {
             previousBalance = Money.add(previousBalance, dp.amount);
             return {
                 label: dp.date.toLocaleString(),
-                value: previousBalance.toString(),
+                value: previousBalance.valueString(),
             };
         });
 
