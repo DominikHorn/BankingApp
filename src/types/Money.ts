@@ -24,9 +24,6 @@ export class Money {
         // Remove decimal dot and store as integer
         result.amount = parseInt(`${amountParts[0]}${amountParts[1]}`, 10);
 
-        // tslint:disable-next-line:no-console
-        console.log(repr, result.amount);
-
         return result;
     }
 
