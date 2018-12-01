@@ -2,18 +2,16 @@ import {Alert, Card, Carousel} from "antd";
 import * as React from 'react';
 import './App.css';
 import {BankStatementTable} from "./components/BankStatementTable";
-import {AccountBalancePlot, IAccountBalancePlotDataPoint} from "./components/plots/AccountBalancePlot";
+import {AccountBalancePlot} from "./components/plots/AccountBalancePlot";
 import {OriginPlot} from "./components/plots/OriginPlot";
 import {ICsvEntity} from "./types/ICsvEntity";
-import {Money} from "./types/Money";
 
 export interface IAppProps {
     appname: string;
 }
 
 interface IAppState {
-    data: ICsvEntity[];
-    accountPlotData: IAccountBalancePlotDataPoint[];
+    transactionData: ICsvEntity[];
 }
 
 class App extends React.Component<IAppProps, IAppState> {
@@ -21,8 +19,7 @@ class App extends React.Component<IAppProps, IAppState> {
         super(props);
 
         this.state = {
-            accountPlotData: [],
-            data: [],
+            transactionData: [],
         };
 
         // Make this keyword refer to app instance in handler code
@@ -33,21 +30,21 @@ class App extends React.Component<IAppProps, IAppState> {
     public render() {
         return (
             <div>
-                {this.state.accountPlotData && this.state.accountPlotData.length > 0 ?
+                {this.state.transactionData && this.state.transactionData.length > 0 ?
                     <Carousel className="Carousel">
                         <AccountBalancePlot
-                            data={this.state.accountPlotData}/>
+                            transactionData={this.state.transactionData}/>
                         <OriginPlot/>
                     </Carousel>
                     : this.renderNoData()
                 }
                 <BankStatementTable
-                    data={this.state.data}
+                    data={this.state.transactionData}
                     onChange={this.handleBankStatementTableChange}/>
             </div>);
     }
 
-    /** Rendering code when no data exists */
+    /** Rendering code when no transactionData exists */
     private renderNoData() {
         return (
             <Card className="InfoCard">
@@ -58,20 +55,8 @@ class App extends React.Component<IAppProps, IAppState> {
 
     /** Event handeling */
     private handleBankStatementTableChange(newData: ICsvEntity[]) {
-        let previousBalance = new Money(0);
-        const accountPlotData: IAccountBalancePlotDataPoint[] = newData.map((dp, index) => {
-            // Update previous balanceRepr for next iteration
-            previousBalance = Money.add(previousBalance, dp.amount);
-
-            return {
-                balance: previousBalance,
-                date: dp.date,
-            };
-        });
-
         this.setState({
-            accountPlotData,
-            data: newData,
+            transactionData: newData,
         });
     }
 }

@@ -10,20 +10,38 @@ import {
     XAxis,
     YAxis
 } from 'recharts';
+import {ICsvEntity} from "../../types/ICsvEntity";
 import {Money} from "../../types/Money";
 import {calculateTrendLine} from "../../util/MathUtil";
 
 export interface IAccountBalancePlotProps {
-    data: IAccountBalancePlotDataPoint[];
+    transactionData: ICsvEntity[];
 }
 
-export interface IAccountBalancePlotDataPoint {
+interface IAccountBalancePlotDataPoint {
     balance: Money,
     date: Date,
 }
 
 export class AccountBalancePlot extends React.Component<IAccountBalancePlotProps, any> {
-    /* Use Memoization to avoid always recalculating this data */
+    /**  Account balance based on transaction Data */
+    private balanceData = memoize(
+        (transactionData: ICsvEntity[]) => {
+            // Find account balance based on transaction Data
+            let previousBalance = new Money(0);
+            return transactionData.map(dp => {
+                // Update previous balanceRepr for next iteration
+                previousBalance = Money.add(previousBalance, dp.amount);
+
+                return {
+                    balance: previousBalance,
+                    date: dp.date,
+                };
+            });
+        }
+    )
+
+    /** Use Memoization to avoid always recalculating this transactionData */
     private processedData = memoize(
         (data: IAccountBalancePlotDataPoint[]) => {
             // Calculate Trend line
@@ -50,7 +68,7 @@ export class AccountBalancePlot extends React.Component<IAccountBalancePlotProps
         }
     );
 
-    /* This code stems from a rechart example: http://recharts.org/en-US/examples/AreaChartFillByValue */
+    /** This code stems from a rechart example: http://recharts.org/en-US/examples/AreaChartFillByValue */
     private gradientOffset = memoize(
         (data: IAccountBalancePlotDataPoint[]) => {
             const dataMax = Math.max(...data.map((i) => i.balance.value()));
@@ -70,8 +88,9 @@ export class AccountBalancePlot extends React.Component<IAccountBalancePlotProps
 
 
     public render() {
-        const processedData = this.processedData(this.props.data);
-        const gradientOff = this.gradientOffset(this.props.data);
+        const balanceData = this.balanceData(this.props.transactionData)
+        const processedData = this.processedData(balanceData);
+        const gradientOff = this.gradientOffset(balanceData);
 
         // TODO: vary plot height based on devices
         // TODO: use unified measures for margin (1em instead of '20' f.e.)
