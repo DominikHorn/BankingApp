@@ -18,6 +18,13 @@ export interface IOriginPlotProps {
     transactionData: ICsvEntity[],
 }
 
+interface IOriginPlotDataPoint {
+    payee: string;
+    value: number;
+    valuePos?: number;
+    valueNeg?: number;
+}
+
 export class OriginPlot extends React.PureComponent<IOriginPlotProps, any> {
     /** Data for this plot */
     private plotData = memoize(
@@ -32,7 +39,18 @@ export class OriginPlot extends React.PureComponent<IOriginPlotProps, any> {
             // TODO rewrite code to avoid this for ... in ...
             // tslint:disable-next-line
             for (const payee in map) {
-                result.push({payee, value: map[payee].value()});
+                const row: IOriginPlotDataPoint = {
+                    payee,
+                    value: map[payee].value(),
+                };
+
+                if (row.value < 0) {
+                    row.valueNeg = row.value;
+                } else {
+                    row.valuePos = row.value;
+                }
+
+                result.push(row);
             }
 
             // Sort based on value magnitude
@@ -69,7 +87,8 @@ export class OriginPlot extends React.PureComponent<IOriginPlotProps, any> {
                     <Tooltip/>
                     <Legend/>
                     <ReferenceLine y={0} stroke='#000'/>
-                    <Bar dataKey="value" fill="#8884d8"/>
+                    <Bar dataKey="valuePos" fill="green" stackId="stack" />
+                    <Bar dataKey="valueNeg" fill="red" stackId="stack" />
                 </BarChart>
             </ResponsiveContainer>
         );
