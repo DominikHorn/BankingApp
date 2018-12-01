@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './App.css';
-import {AccountBalancePlot, IAccountPlotDataPoint} from "./components/AccountBalancePlot";
+import {AccountBalancePlot, IAccountBalancePlotDataPoint} from "./components/AccountBalancePlot";
 import {BankStatementTable} from "./components/BankStatementTable";
 import {ICsvEntity} from "./types/ICsvEntity";
 import {Money} from "./types/Money";
@@ -11,7 +11,7 @@ export interface IAppProps {
 
 interface IAppState {
     data: ICsvEntity[];
-    accountPlotData: IAccountPlotDataPoint[];
+    accountPlotData: IAccountBalancePlotDataPoint[];
 }
 
 class App extends React.Component<IAppProps, IAppState> {
@@ -42,12 +42,13 @@ class App extends React.Component<IAppProps, IAppState> {
     /** Event handeling */
     private handleBankStatementTableChange(newData: ICsvEntity[]) {
         let previousBalance = new Money(0);
-        const accountPlotData: IAccountPlotDataPoint[] = newData.map(dp => {
-            // Update previous balance for next iteration
+        const accountPlotData: IAccountBalancePlotDataPoint[] = newData.map((dp, index) => {
+            // Update previous balanceRepr for next iteration
             previousBalance = Money.add(previousBalance, dp.amount);
+
             return {
-                label: dp.date.toLocaleString(),
-                value: previousBalance.toString(),
+                balance: previousBalance,
+                date: dp.date,
             };
         });
 

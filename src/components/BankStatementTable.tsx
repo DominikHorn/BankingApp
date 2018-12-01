@@ -58,7 +58,6 @@ export class BankStatementTable extends React.Component<IBankStatementProps, any
 
 
     /** Event handling code */
-
     private onInputChange(event: ChangeEvent) {
         if (event.target == null) {
             // Bail out on null

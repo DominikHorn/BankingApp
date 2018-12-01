@@ -9,6 +9,12 @@ export const csvColumns = [{
     title: 'Date',
     width: 100,
 }, {
+    dataIndex: 'amount',
+    key: 'amount',
+    render: (mon: Money) => mon.toString(),
+    title: 'Amount',
+    width: 80,
+}, {
     dataIndex: 'payee',
     key: 'payee',
     title: 'Payee',
@@ -33,26 +39,21 @@ export const csvColumns = [{
     key: 'category',
     title: 'Category',
     width: 150,
-}, {
-    dataIndex: 'amount',
-    key: 'amount',
-    title: 'Amount',
-    width: 80,
-}, {
-    dataIndex: 'amountForeign',
-    key: 'amountForeign',
-    title: 'Amount Foreign',
-    width: 120,
-}, {
-    dataIndex: 'typeForeign',
-    key: 'typeForeign',
-    title: 'Type Foreign',
-    width: 100,
-}, {
-    dataIndex: 'exchangeRate',
-    key: 'exchangeRate',
-    title: 'Exchange Rate',
-    width: 120,
+// }, {
+//     dataIndex: 'amountForeign',
+//     key: 'amountForeign',
+//     title: 'Amount Foreign',
+//     width: 120,
+// }, {
+//     dataIndex: 'typeForeign',
+//     key: 'typeForeign',
+//     title: 'Type Foreign',
+//     width: 100,
+// }, {
+//     dataIndex: 'exchangeRate',
+//     key: 'exchangeRate',
+//     title: 'Exchange Rate',
+//     width: 120,
 }];
 
 export function parseN26Csv(fileContents: string): ICsvEntity[] {
@@ -64,9 +65,9 @@ export function parseN26Csv(fileContents: string): ICsvEntity[] {
     const columnTitles = csvLineToFields(lines[0]);
     const result: ICsvEntity[] = [];
     for (let i = 1; i < lines.length; i++) {
-        const line = lines[i]
+        const line = lines[i];
         if (line && line !== "") {
-            result.push(parseN26CsvLine(columnTitles, line));
+            result.push(parseN26CsvLine(columnTitles, line, i));
         }
     }
     return result;
@@ -74,7 +75,7 @@ export function parseN26Csv(fileContents: string): ICsvEntity[] {
 
 function csvLineToFields(csvLine: string): string[] {
     return csvLine
-        .substr(1, csvLine.length-2)
+        .substr(1, csvLine.length - 2)
         .split(/","/);
 }
 
@@ -86,7 +87,7 @@ function getField(fieldName: string, fields: string[], fieldMap: string[]): stri
     return fields[fieldIndex];
 }
 
-function parseN26CsvLine(columnTitles: string[], line: string): ICsvEntity {
+function parseN26CsvLine(columnTitles: string[], line: string, lineNumber: number): ICsvEntity {
     const fields = csvLineToFields(line);
     const accountNumber = getField("Account number", fields, columnTitles);
     const amount = getField("Amount (EUR)", fields, columnTitles);
@@ -105,6 +106,7 @@ function parseN26CsvLine(columnTitles: string[], line: string): ICsvEntity {
         category,
         date: date ? new Date(date) : new Date(), // TODO: rework this line
         exchangeRate: exchangeRate && exchangeRate !== "" ? parseFloat(exchangeRate) : undefined,
+        key: `${lineNumber}`,
         payee,
         paymentReference,
         transactionType,

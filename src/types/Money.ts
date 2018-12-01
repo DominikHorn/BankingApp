@@ -24,9 +24,6 @@ export class Money {
         // Remove decimal dot and store as integer
         result.amount = parseInt(`${amountParts[0]}${amountParts[1]}`, 10);
 
-        // tslint:disable-next-line:no-console
-        console.log(repr, result.amount);
-
         return result;
     }
 
@@ -35,8 +32,16 @@ export class Money {
         this.amount = amount;
     }
 
-    public toString(): string {
+    public value(): number {
+        return this.amount / 100.0;
+    }
+
+    public valueString(): string {
         const amountStr = this.amount.toString();
         return `${amountStr.substr(0, amountStr.length - 2)}.${amountStr.substr(amountStr.length - 2, 2)}`;
+    }
+
+    public toString(): string {
+        return `${this.valueString()}€`;
     }
 }

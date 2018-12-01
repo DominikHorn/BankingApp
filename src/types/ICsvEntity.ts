@@ -1,6 +1,9 @@
 import {Money} from "./Money";
 
 export interface ICsvEntity {
+    // Key is needed for unique identification of an Entity
+    key: string,
+
     accountNumber?: string,
     amount: Money,
 
