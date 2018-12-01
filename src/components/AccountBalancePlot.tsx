@@ -30,7 +30,7 @@ export class AccountBalancePlot extends React.Component<IAccountBalancePlotProps
         (data: IAccountBalancePlotDataPoint[]) => {
             // Calculate Trend line
             const trendLine = calculateTrendLine(
-                data.map((dp, index) => ({x: index+1, y: dp.balance.value()})));
+                data.map((dp, index) => ({x: index + 1, y: dp.balance.value()})));
 
             // Map correct trend cords to each point
             return data.map((dp, index) => {
@@ -52,6 +52,25 @@ export class AccountBalancePlot extends React.Component<IAccountBalancePlotProps
         }
     );
 
+    /* This code stems from a rechart example: http://recharts.org/en-US/examples/AreaChartFillByValue */
+    private gradientOffset = memoize(
+        (data: IAccountBalancePlotDataPoint[]) => {
+            const dataMax = Math.max(...data.map((i) => i.balance.value()));
+            const dataMin = Math.min(...data.map((i) => i.balance.value()));
+
+            if (dataMax <= 0) {
+                return 0
+            }
+            else if (dataMin >= 0) {
+                return 1
+            }
+            else {
+                return dataMax / (dataMax - dataMin);
+            }
+        }
+    );
+
+
     public render() {
         // TODO: vary plot height based on devices
         // TODO: use unified measures for margin (1em instead of '20' f.e.)
@@ -60,11 +79,12 @@ export class AccountBalancePlot extends React.Component<IAccountBalancePlotProps
 
     private renderGraph() {
         const processedData = this.processedData(this.props.data);
+        const gradientOff = this.gradientOffset(this.props.data);
 
         return (
             <ResponsiveContainer
                 width={"100%"}
-                height={400}
+                height={500}
             >
                 <ComposedChart
                     data={processedData}
@@ -76,12 +96,12 @@ export class AccountBalancePlot extends React.Component<IAccountBalancePlotProps
                     <Tooltip/>
                     <defs>
                         <linearGradient id="splitColor" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset={0.6} stopColor="green" stopOpacity={1}/>
-                            <stop offset={0.6} stopColor="red" stopOpacity={1}/>
+                            <stop offset={gradientOff} stopColor="green" stopOpacity={1}/>
+                            <stop offset={gradientOff} stopColor="red" stopOpacity={1}/>
                         </linearGradient>
                     </defs>
-                    <Area type="monotone" dataKey="balance" stroke="#000" fill="url(#splitColor)"/>
-                    <Line type="monotone" dataKey="trendLineY" stroke="#300"/>
+                    <Area type="monotone" dataKey="balance" fill="url(#splitColor)" unit="€"/>
+                    <Line type="linear" dataKey="trendLineY" stroke="#000" dot={false} unit="€"/>
                 </ComposedChart>
             </ResponsiveContainer>
         );
