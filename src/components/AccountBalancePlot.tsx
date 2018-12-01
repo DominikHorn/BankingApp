@@ -72,8 +72,6 @@ export class AccountBalancePlot extends React.Component<IAccountBalancePlotProps
 
 
     public render() {
-        // TODO: vary plot height based on devices
-        // TODO: use unified measures for margin (1em instead of '20' f.e.)
         return this.props.data.length > 0 ? this.renderGraph() : this.renderNoData();
     }
 
@@ -81,6 +79,8 @@ export class AccountBalancePlot extends React.Component<IAccountBalancePlotProps
         const processedData = this.processedData(this.props.data);
         const gradientOff = this.gradientOffset(this.props.data);
 
+        // TODO: vary plot height based on devices
+        // TODO: use unified measures for margin (1em instead of '20' f.e.)
         return (
             <ResponsiveContainer
                 width={"100%"}
