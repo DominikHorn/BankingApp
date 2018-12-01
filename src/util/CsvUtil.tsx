@@ -1,5 +1,6 @@
 import * as React from "react";
 import {ICsvEntity} from "../types/ICsvEntity";
+import {Money} from "../types/Money";
 
 export const csvColumns = [{
     dataIndex: 'date',
@@ -99,7 +100,7 @@ function parseN26CsvLine(columnTitles: string[], line: string): ICsvEntity {
     const typeForeign = getField("Type Foreign Currency", fields, columnTitles);
     return {
         accountNumber,
-        amount: amount && amount !== "" ? parseFloat(amount) : undefined,
+        amount: amount && amount !== "" ? Money.parse(amount) : new Money(),
         amountForeign: amountForeign && amountForeign !== "" ? parseFloat(amountForeign) : undefined,
         category,
         date: date ? new Date(date) : new Date(), // TODO: rework this line

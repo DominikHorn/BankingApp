@@ -1,7 +1,11 @@
-// TODO: currency should always be int not float!
+import {Money} from "./Money";
+
 export interface ICsvEntity {
     accountNumber?: string,
-    amount?: number,
+    amount: Money,
+
+    // Since Money class only supports one currency type it does not make sense
+    // To have foreign amount be of type Money aswell. Change ASAP
     amountForeign?: number,
     category?: string,
     date: Date,

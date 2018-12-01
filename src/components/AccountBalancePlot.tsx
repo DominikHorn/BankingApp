@@ -8,7 +8,7 @@ export interface IAccountBalancePlotProps {
 
 export interface IAccountPlotDataPoint {
     label: string;
-    value: number;
+    value: string;
 }
 
 export class AccountBalancePlot extends React.Component<IAccountBalancePlotProps, any> {

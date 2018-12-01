@@ -3,6 +3,7 @@ import './App.css';
 import {AccountBalancePlot, IAccountPlotDataPoint} from "./components/AccountBalancePlot";
 import {BankStatementTable} from "./components/BankStatementTable";
 import {ICsvEntity} from "./types/ICsvEntity";
+import {Money} from "./types/Money";
 
 export interface IAppProps {
     appname: string;
@@ -40,12 +41,13 @@ class App extends React.Component<IAppProps, IAppState> {
 
     /** Event handeling */
     private handleBankStatementTableChange(newData: ICsvEntity[]) {
-        let balance = 0;
+        let previousBalance = new Money(0);
         const accountPlotData: IAccountPlotDataPoint[] = newData.map(dp => {
-            balance = balance + (dp.amount ? dp.amount : 0);
+            // Update previous balance for next iteration
+            previousBalance = Money.add(previousBalance, dp.amount);
             return {
                 label: dp.date.toLocaleString(),
-                value: balance,
+                value: previousBalance.toString(),
             };
         });
 
