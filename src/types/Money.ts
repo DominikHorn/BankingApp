@@ -32,6 +32,10 @@ export class Money {
         this.amount = amount;
     }
 
+    public value(): number {
+        return this.amount / 100.0;
+    }
+
     public valueString(): string {
         const amountStr = this.amount.toString();
         return `${amountStr.substr(0, amountStr.length - 2)}.${amountStr.substr(amountStr.length - 2, 2)}`;
