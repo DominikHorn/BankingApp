@@ -97,7 +97,7 @@ export class AccountBalancePlot extends React.PureComponent<IAccountBalancePlotP
         return (
             <ResponsiveContainer
                 width={"100%"}
-                height={500}
+                height={400}
             >
                 <ComposedChart
                     data={processedData}

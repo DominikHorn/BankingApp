@@ -4,8 +4,6 @@ import {
     Bar,
     BarChart,
     CartesianGrid,
-    Legend,
-    ReferenceLine,
     ResponsiveContainer,
     Tooltip,
     XAxis,
@@ -75,20 +73,18 @@ export class OriginPlot extends React.PureComponent<IOriginPlotProps, any> {
         return (
             <ResponsiveContainer
                 width={"100%"}
-                height={500}
+                height={400}
             >
                 <BarChart
                     data={plotData}
-                    margin={{top: 20, right: 50, bottom: 40}}
+                    margin={{top: 20, right: 50, bottom: 100}}
                 >
-                    <CartesianGrid strokeDasharray="3 3"/>
-                    <XAxis dataKey="payee"/>
+                    <CartesianGrid strokeDasharray="1 1"/>
+                    <XAxis dataKey="payee" interval={0} tick={{angle: 20, textAnchor: "start"}}/>
                     <YAxis/>
                     <Tooltip/>
-                    <Legend/>
-                    <ReferenceLine y={0} stroke='#000'/>
-                    <Bar dataKey="valuePos" fill="green" stackId="stack" />
-                    <Bar dataKey="valueNeg" fill="red" stackId="stack" />
+                    <Bar dataKey="valuePos" fill="green" stackId="stack"/>
+                    <Bar dataKey="valueNeg" fill="red" stackId="stack"/>
                 </BarChart>
             </ResponsiveContainer>
         );
