@@ -46,7 +46,7 @@ export class AccountBalancePlot extends React.Component<IAccountBalancePlotProps
                 return {
                     balance: dp.balance.valueString(),
                     dateRepr: `${dd < 10 ? `0${dd}` : dd}.${mm < 10 ? `0${mm}` : mm}.${yyyy}`,
-                    trendLineY,
+                    trendLineY: +trendLineY.toFixed(2),
                 };
             });
         }
@@ -101,7 +101,7 @@ export class AccountBalancePlot extends React.Component<IAccountBalancePlotProps
                         </linearGradient>
                     </defs>
                     <Area type="monotone" dataKey="balance" fill="url(#splitColor)" unit="€"/>
-                    <Line type="linear" dataKey="trendLineY" stroke="#000" dot={false} unit="€"/>
+                    <Line type="linear" dataKey="trendLineY" stroke="#000" dot={false}/>
                 </ComposedChart>
             </ResponsiveContainer>
         );
