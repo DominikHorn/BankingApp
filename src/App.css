@@ -1,1 +1,13 @@
 @import '~antd/dist/antd.css';
+
+.Carousel {
+    padding-bottom: 30px;
+}
+
+.Carousel button {
+    background: #000 !important;
+}
+
+.InfoCard {
+    margin: 1em 1em 1em 1em;
+}

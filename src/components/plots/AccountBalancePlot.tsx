@@ -1,4 +1,3 @@
-import {Alert, Card} from "antd";
 import memoize from 'memoize-one';
 import * as React from 'react';
 import {
@@ -11,9 +10,8 @@ import {
     XAxis,
     YAxis
 } from 'recharts';
-import {Money} from "../types/Money";
-import {calculateTrendLine} from "../util/MathUtil";
-import './AccountBalancePlot.css';
+import {Money} from "../../types/Money";
+import {calculateTrendLine} from "../../util/MathUtil";
 
 export interface IAccountBalancePlotProps {
     data: IAccountBalancePlotDataPoint[];
@@ -72,10 +70,6 @@ export class AccountBalancePlot extends React.Component<IAccountBalancePlotProps
 
 
     public render() {
-        return this.props.data.length > 0 ? this.renderGraph() : this.renderNoData();
-    }
-
-    private renderGraph() {
         const processedData = this.processedData(this.props.data);
         const gradientOff = this.gradientOffset(this.props.data);
 
@@ -104,14 +98,6 @@ export class AccountBalancePlot extends React.Component<IAccountBalancePlotProps
                     <Line type="linear" dataKey="trendLineY" stroke="#000" dot={false}/>
                 </ComposedChart>
             </ResponsiveContainer>
-        );
-    }
-
-    private renderNoData() {
-        return (
-            <Card className="InfoCard">
-                <Alert message="Es sind keine Plotbaren Daten vorhanden" type="warning"/>
-            </Card>
         );
     }
 }

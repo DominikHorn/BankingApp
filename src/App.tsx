@@ -1,7 +1,9 @@
+import {Alert, Card, Carousel} from "antd";
 import * as React from 'react';
 import './App.css';
-import {AccountBalancePlot, IAccountBalancePlotDataPoint} from "./components/AccountBalancePlot";
 import {BankStatementTable} from "./components/BankStatementTable";
+import {AccountBalancePlot, IAccountBalancePlotDataPoint} from "./components/plots/AccountBalancePlot";
+import {OriginPlot} from "./components/plots/OriginPlot";
 import {ICsvEntity} from "./types/ICsvEntity";
 import {Money} from "./types/Money";
 
@@ -31,12 +33,27 @@ class App extends React.Component<IAppProps, IAppState> {
     public render() {
         return (
             <div>
-                <AccountBalancePlot
-                    data={this.state.accountPlotData}/>
+                {this.state.accountPlotData && this.state.accountPlotData.length > 0 ?
+                    <Carousel className="Carousel">
+                        <AccountBalancePlot
+                            data={this.state.accountPlotData}/>
+                        <OriginPlot/>
+                    </Carousel>
+                    : this.renderNoData()
+                }
                 <BankStatementTable
                     data={this.state.data}
                     onChange={this.handleBankStatementTableChange}/>
             </div>);
+    }
+
+    /** Rendering code when no data exists */
+    private renderNoData() {
+        return (
+            <Card className="InfoCard">
+                <Alert message="Es sind keine Plotbaren Daten vorhanden" type="warning"/>
+            </Card>
+        );
     }
 
     /** Event handeling */
