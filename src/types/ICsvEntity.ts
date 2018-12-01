@@ -13,7 +13,7 @@ export interface ICsvEntity {
     category?: string,
     date: Date,
     exchangeRate?: number,
-    payee?: string,
+    payee: string,
     paymentReference?: string,
     transactionType?: string,
     typeForeign?: string,

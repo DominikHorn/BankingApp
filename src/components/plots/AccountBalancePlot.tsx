@@ -23,7 +23,7 @@ interface IAccountBalancePlotDataPoint {
     date: Date,
 }
 
-export class AccountBalancePlot extends React.Component<IAccountBalancePlotProps, any> {
+export class AccountBalancePlot extends React.PureComponent<IAccountBalancePlotProps, any> {
     /**  Account balance based on transaction Data */
     private balanceData = memoize(
         (transactionData: ICsvEntity[]) => {

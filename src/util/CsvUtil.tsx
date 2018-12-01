@@ -108,7 +108,7 @@ function parseN26CsvLine(columnTitles: string[], line: string, lineNumber: numbe
         date: date ? new Date(date) : new Date(), // TODO: rework this line
         exchangeRate: exchangeRate && exchangeRate !== "" ? parseFloat(exchangeRate) : undefined,
         key: `${lineNumber}`,
-        payee,
+        payee: payee ? payee : "Unkown",
         paymentReference,
         transactionType,
         typeForeign,

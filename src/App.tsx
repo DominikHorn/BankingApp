@@ -34,7 +34,8 @@ class App extends React.Component<IAppProps, IAppState> {
                     <Carousel className="Carousel">
                         <AccountBalancePlot
                             transactionData={this.state.transactionData}/>
-                        <OriginPlot/>
+                        <OriginPlot
+                            transactionData={this.state.transactionData}/>
                     </Carousel>
                     : this.renderNoData()
                 }
