@@ -1,3 +1,4 @@
+import {Tag} from "antd";
 import * as React from "react";
 import {ICsvEntity} from "../types/ICsvEntity";
 import {Money} from "../types/Money";
@@ -11,7 +12,7 @@ export const csvColumns = [{
 }, {
     dataIndex: 'amount',
     key: 'amount',
-    render: (mon: Money) => mon.toString(),
+    render: (mon: Money) => <Tag color={mon.value() > 0 ? 'green' : 'red'}>{mon.toString()}</Tag>,
     title: 'Amount',
     width: 80,
 }, {

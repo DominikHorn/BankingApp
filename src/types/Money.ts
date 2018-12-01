@@ -42,6 +42,6 @@ export class Money {
     }
 
     public toString(): string {
-        return `${this.valueString()}€`;
+        return `${this.valueString()} €`;
     }
 }
