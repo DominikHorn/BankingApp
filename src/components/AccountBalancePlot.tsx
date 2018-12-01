@@ -1,3 +1,4 @@
+import memoize from "memoize-one";
 import * as React from 'react';
 import {Line} from "react-chartjs-2";
 import './AccountBalancePlot.css';
@@ -12,9 +13,9 @@ export interface IAccountPlotDataPoint {
 }
 
 export class AccountBalancePlot extends React.Component<IAccountBalancePlotProps, any> {
-    public render() {
-        // TODO: don't recalc this in render every time, instead only on props change
-        const data = {
+    /** Memoized linechart data. This prevents unnecessary recalcs */
+    private lineChartData = memoize(
+        (dat: IAccountPlotDataPoint[]) => ({
             datasets: [
                 {
                     backgroundColor: 'rgba(75,192,192,0.4)',
@@ -23,7 +24,7 @@ export class AccountBalancePlot extends React.Component<IAccountBalancePlotProps
                     borderDash: [],
                     borderDashOffset: 0.0,
                     borderJoinStyle: 'miter',
-                    data: this.props.data.map(d => d.value),
+                    data: dat.map(d => d.value),
                     fill: false,
                     label: 'Account Balance',
                     lineTension: 0.1,
@@ -38,19 +39,20 @@ export class AccountBalancePlot extends React.Component<IAccountBalancePlotProps
                     pointRadius: 1,
                 }
             ],
-            labels: this.props.data.map(d => d.label),
-        };
-        const options = {
-            maintainAspectRatio: false,
-        };
+            labels: dat.map(d => d.label)
+        }));
 
+    public render() {
+        const lineChartData = this.lineChartData(this.props.data);
 
         // TODO: correct this!!!
         // @ts-ignore type definitions are wrong
-        return <Line data={data}
+        return <Line data={lineChartData}
                      className="linePlot"
                      height={100}
-                     options={options}
+            // options={{
+            //     maintainAspectRatio: false,
+            // }}
         />;
     }
 }
